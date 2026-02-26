@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diário do Nosso Bebê</title>
     
+    <link rel="icon" href="revelacao.png" type="image/png">
+
+    <meta property="og:title" content="Diário do Nosso Bebê">
+    <meta property="og:description" content="Acompanhe os melhores momentos até a chegada do nosso bebê ❤️">
+    <meta property="og:image" content="revelacao.png">
+    <meta property="og:type" content="website">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -35,7 +42,6 @@
             padding-bottom: 80px;
         }
 
-        /* --- Nuvens Estilo Papel Recortado (Moldura) --- */
         .paper-cloud {
             position: fixed;
             background: #FFFBF8;
@@ -51,12 +57,17 @@
         .cloud-bottom-left::before { content: ''; position: absolute; background: inherit; width: 180px; height: 180px; bottom: 40px; left: 60px; border-radius: 50%; box-shadow: inherit; }
         .cloud-bottom-right { width: 190px; height: 190px; bottom: -70px; right: -20px; }
 
-        /* --- Cabeçalho --- */
         header {
             text-align: center;
             padding: 50px 20px 30px;
             position: relative;
             z-index: 1;
+        }
+
+        .logo-header {
+            max-width: 160px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 6px rgba(92, 74, 68, 0.08));
         }
 
         header h1 {
@@ -73,7 +84,6 @@
             font-weight: 500;
         }
 
-        /* --- Linha do Tempo (Timeline) --- */
         .timeline {
             position: relative;
             max-width: 800px;
@@ -82,7 +92,6 @@
             z-index: 1;
         }
 
-        /* A linha central tracejada */
         .timeline::after {
             content: '';
             position: absolute;
@@ -93,7 +102,7 @@
             bottom: 0;
             left: 50%;
             margin-left: -2px;
-            border-left: 2px dashed #CBB8B3; /* Efeito de costura/papel */
+            border-left: 2px dashed #CBB8B3; 
         }
 
         .timeline-item {
@@ -101,22 +110,19 @@
             position: relative;
             background-color: inherit;
             width: 50%;
-            opacity: 0; /* Inicia invisível para animação */
+            opacity: 0; 
             transform: translateY(40px);
             transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* Classe ativada pelo JavaScript quando o item aparece na tela */
         .timeline-item.visivel {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Lado esquerdo e direito */
         .left { left: 0; }
         .right { left: 50%; }
 
-        /* As bolinhas na linha do tempo */
         .timeline-item::after {
             content: '';
             position: absolute;
@@ -131,14 +137,9 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
 
-        .right::after {
-            left: -12px;
-        }
-
-        /* Cores alternadas para as bolinhas (Rosa e Azul) */
+        .right::after { left: -12px; }
         .right::after { border-color: #9EBCCC; }
 
-        /* --- O Cartão de Memória (Conteúdo) --- */
         .card {
             background: var(--branco-card);
             padding: 25px;
@@ -173,7 +174,6 @@
             margin-bottom: 15px;
         }
 
-        /* Estilo para Mídias (Fotos e Vídeos) */
         .media-container {
             border-radius: 12px;
             overflow: hidden;
@@ -188,17 +188,17 @@
             height: auto;
             display: block;
             object-fit: cover;
-            aspect-ratio: 4/3; /* Mantém fotos padronizadas */
+            aspect-ratio: 4/3; 
             transition: transform 0.3s;
         }
 
         .media-container img:hover {
-            transform: scale(1.03); /* Leve zoom ao passar o mouse */
+            transform: scale(1.03); 
         }
 
         .video-wrapper {
             position: relative;
-            padding-bottom: 56.25%; /* 16:9 */
+            padding-bottom: 56.25%; 
             height: 0;
         }
 
@@ -208,26 +208,17 @@
             border: 0;
         }
 
-        /* --- Responsividade para Celulares --- */
         @media screen and (max-width: 768px) {
-            .timeline::after {
-                left: 31px; /* Joga a linha para a lateral esquerda */
-            }
+            .timeline::after { left: 31px; }
             .timeline-item {
                 width: 100%;
                 padding-left: 70px;
                 padding-right: 0px;
                 padding-bottom: 20px;
             }
-            .timeline-item.right {
-                left: 0%;
-            }
-            .left::after, .right::after {
-                left: 19px; /* Alinha todas as bolinhas na linha lateral */
-            }
-            header h1 {
-                font-size: 3rem;
-            }
+            .timeline-item.right { left: 0%; }
+            .left::after, .right::after { left: 19px; }
+            header h1 { font-size: 3rem; }
         }
     </style>
 </head>
@@ -239,6 +230,7 @@
     <div class="paper-cloud cloud-bottom-right"></div>
 
     <header>
+        <img src="revelacao.png" alt="Júlia ou Léo" class="logo-header">
         <h1>Nosso Diário</h1>
         <p>Guardando os melhores momentos até a sua chegada ❤️</p>
     </header>
@@ -305,20 +297,17 @@
     </div>
 
     <script>
-        // Lógica para animar as cartas (fade-in) conforme a página rola para baixo
         document.addEventListener("DOMContentLoaded", function() {
             const observerOpcoes = {
                 root: null,
                 rootMargin: '0px',
-                threshold: 0.15 // Dispara quando 15% do card estiver visível na tela
+                threshold: 0.15 
             };
 
             const observer = new IntersectionObserver((entradas, observer) => {
                 entradas.forEach(entrada => {
                     if (entrada.isIntersecting) {
-                        // Adiciona a classe 'visivel' que faz a mágica no CSS
                         entrada.target.classList.add('visivel');
-                        // Para de observar o elemento depois que ele aparece a primeira vez
                         observer.unobserve(entrada.target);
                     }
                 });
