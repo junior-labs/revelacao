@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chá Revelação: Júlia ou Léo?</title>
     
-    <link rel="icon" href="revelacao.png" type="image/png">
+    <link rel="icon" href="favicon.png" type="image/png">
 
     <meta property="og:title" content="Chá Revelação: Júlia ou Léo?">
     <meta property="og:description" content="Acompanhe a revelação e deixe seu palpite e carinho guardados.">
-    <meta property="og:image" content="revelacao.png">
+    <meta property="og:image" content="SUA_URL_ABSOLUTA_NO_GITHUB/revelacao.png">
+    <meta property="og:image:secure_url" content="SUA_URL_ABSOLUTA_NO_GITHUB/revelacao.png">
     <meta property="og:type" content="website">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,6 +46,7 @@
             overflow-x: hidden;
         }
 
+        /* Fundo de Nuvens Aquarela Estáticas */
         .decoracao-nuvens {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -58,7 +60,7 @@
             filter: blur(20px);
         }
 
-        /* Círculos Flutuantes - Quantidade reduzida para 6 */
+        /* CÍRCULOS FLUTUANTES SUAVES - Quantidade reduzida para 6 */
         .area-circulos {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -69,7 +71,7 @@
 
         .circulo {
             position: absolute;
-            border-radius: 50%;
+            border-radius: 50%; /* Faz a div ficar redonda */
             opacity: 0.15; 
             mix-blend-mode: multiply; 
             animation: flutuar linear infinite;
@@ -78,6 +80,7 @@
         .c-rosa { background-color: var(--rosa-forte); }
         .c-azul { background-color: var(--azul-forte); }
 
+        /* Espalhamento e tamanhos aleatórios para 6 círculos */
         .c-1 { left: 15%; width: 40px; height: 40px; animation-duration: 25s; animation-delay: 0s; }
         .c-2 { left: 85%; width: 60px; height: 60px; animation-duration: 30s; animation-delay: 5s; }
         .c-3 { left: 30%; width: 30px; height: 30px; animation-duration: 22s; animation-delay: 2s; }
@@ -90,6 +93,7 @@
             100% { transform: translateY(-20vh) rotate(10deg); }
         }
 
+        /* Layout Principal */
         .container {
             max-width: 650px;
             margin: 0 auto;
@@ -104,8 +108,10 @@
             padding-top: 20px;
         }
 
+        /* LOGO DOBRO DO TAMANHO */
         .logo-header {
-            max-width: 160px;
+            max-width: 320px; /* Alterado de 160px para 320px */
+            height: auto; /* Mantém proporção */
             margin-bottom: 10px;
             filter: drop-shadow(0 4px 6px rgba(92, 74, 68, 0.08));
         }
@@ -124,6 +130,7 @@
             font-weight: 600;
         }
 
+        /* Vídeo da Live */
         .video-container {
             background: var(--branco-card);
             padding: 10px;
@@ -146,6 +153,7 @@
             border: 0;
         }
 
+        /* Cards Gerais */
         .card {
             background: var(--branco-card);
             border-radius: 20px;
@@ -164,6 +172,7 @@
             color: var(--texto-marrom);
         }
 
+        /* Votação */
         .poll-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -204,6 +213,7 @@
         .progress-julia { background-color: var(--rosa-forte); width: 50%; transition: width 0.8s ease; }
         .progress-leo { background-color: var(--azul-forte); width: 50%; transition: width 0.8s ease; }
 
+        /* Formulário */
         .form-group { margin-bottom: 15px; text-align: left; }
         input, textarea {
             width: 100%; padding: 12px 15px; border: 2px solid #EAE3E1; border-radius: 12px;
@@ -278,6 +288,7 @@
     </div>
 
     <script>
+        // ATENÇÃO: Cole a URL gerada pelo seu Google Apps Script aqui:
         const APPS_SCRIPT_URL = "SUA_URL_DO_WEB_APP_AQUI";
 
         function dispararConfetes(tipo) {
