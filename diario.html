@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diário do Nosso Bebê</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --rosa-aquarela: #F7D6D9;
+            --azul-aquarela: #D4E6F1;
+            --fundo-creme: #FCFAF6;
+            --texto-marrom: #5C4A44;
+            --texto-claro: #8C7A74;
+            --branco-card: rgba(255, 255, 255, 0.98);
+            --sombra-papel: 0 8px 16px rgba(92, 74, 68, 0.12);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background-color: var(--fundo-creme);
+            color: var(--texto-marrom);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        /* --- Nuvens Estilo Papel Recortado (Moldura) --- */
+        .paper-cloud {
+            position: fixed;
+            background: #FFFBF8;
+            border-radius: 50%;
+            box-shadow: var(--sombra-papel);
+            z-index: -2;
+        }
+        .cloud-top-left { width: 180px; height: 180px; top: -60px; left: -40px; }
+        .cloud-top-left::before { content: ''; position: absolute; background: inherit; width: 140px; height: 140px; top: 60px; left: 100px; border-radius: 50%; box-shadow: inherit; }
+        .cloud-top-right { width: 200px; height: 200px; top: -80px; right: -50px; }
+        .cloud-top-right::before { content: ''; position: absolute; background: inherit; width: 160px; height: 160px; top: 70px; right: 80px; border-radius: 50%; box-shadow: inherit; }
+        .cloud-bottom-left { width: 150px; height: 150px; bottom: -40px; left: -30px; }
+        .cloud-bottom-left::before { content: ''; position: absolute; background: inherit; width: 180px; height: 180px; bottom: 40px; left: 60px; border-radius: 50%; box-shadow: inherit; }
+        .cloud-bottom-right { width: 190px; height: 190px; bottom: -70px; right: -20px; }
+
+        /* --- Cabeçalho --- */
+        header {
+            text-align: center;
+            padding: 50px 20px 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: var(--texto-marrom);
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--texto-claro);
+            font-weight: 500;
+        }
+
+        /* --- Linha do Tempo (Timeline) --- */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            z-index: 1;
+        }
+
+        /* A linha central tracejada */
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background-color: #EAE3E1;
+            border-radius: 2px;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+            border-left: 2px dashed #CBB8B3; /* Efeito de costura/papel */
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            background-color: inherit;
+            width: 50%;
+            opacity: 0; /* Inicia invisível para animação */
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Classe ativada pelo JavaScript quando o item aparece na tela */
+        .timeline-item.visivel {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Lado esquerdo e direito */
+        .left { left: 0; }
+        .right { left: 50%; }
+
+        /* As bolinhas na linha do tempo */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            right: -12px;
+            background-color: var(--fundo-creme);
+            border: 4px solid var(--texto-marrom);
+            top: 30px;
+            border-radius: 50%;
+            z-index: 1;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+
+        .right::after {
+            left: -12px;
+        }
+
+        /* Cores alternadas para as bolinhas (Rosa e Azul) */
+        .left::after { border-color: #E5A3AD; }
+        .right::after { border-color: #9EBCCC; }
+
+        /* --- O Cartão de Memória (Conteúdo) --- */
+        .card {
+            background: var(--branco-card);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: var(--sombra-papel);
+            border: 1px solid rgba(255,255,255,0.9);
+            position: relative;
+        }
+
+        .card-date {
+            display: inline-block;
+            background: #F0EAE8;
+            color: var(--texto-claro);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        .card h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            line-height: 1.2;
+        }
+
+        .card p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        /* Estilo para Mídias (Fotos e Vídeos) */
+        .media-container {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            margin-top: 15px;
+            position: relative;
+            background: #f4f4f4;
+        }
+
+        .media-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            aspect-ratio: 4/3; /* Mantém fotos padronizadas */
+            transition: transform 0.3s;
+        }
+
+        .media-container img:hover {
+            transform: scale(1.03); /* Leve zoom ao passar o mouse */
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 0;
+        }
+
+        /* --- Responsividade para Celulares --- */
+        @media screen and (max-width: 768px) {
+            .timeline::after {
+                left: 31px; /* Joga a linha para a lateral esquerda */
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 0px;
+                padding-bottom: 20px;
+            }
+            .timeline-item.right {
+                left: 0%;
+            }
+            .left::after, .right::after {
+                left: 19px; /* Alinha todas as bolinhas na linha lateral */
+            }
+            header h1 {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="paper-cloud cloud-top-left"></div>
+    <div class="paper-cloud cloud-top-right"></div>
+    <div class="paper-cloud cloud-bottom-left"></div>
+    <div class="paper-cloud cloud-bottom-right"></div>
+
+    <header>
+        <h1>Nosso Diário</h1>
+        <p>Guardando os melhores momentos até a sua chegada ❤️</p>
+    </header>
+
+    <div class="timeline">
+        
+        <div class="timeline-item left">
+            <div class="card">
+                <span class="card-date">O INÍCIO DE TUDO</span>
+                <h2>O Positivo</h2>
+                <p>O momento em que os nossos corações bateram mais forte. Uma mistura de alegria, ansiedade e muito amor pelo milagre que já estava a caminho.</p>
+                <div class="media-container">
+                    <img src="https://images.unsplash.com/photo-1584896792473-8208a8f4625b?auto=format&fit=crop&w=600&q=80" alt="Teste Positivo">
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item right">
+            <div class="card">
+                <span class="card-date">PRIMEIRO ENCONTRO</span>
+                <h2>A Melhor Melodia</h2>
+                <p>Ouvir o seu coraçãozinho pela primeira vez foi a música mais linda que já escutamos na vida. Cada batida é uma certeza de que tudo está perfeito.</p>
+                <div class="media-container">
+                    <img src="https://images.unsplash.com/photo-1522771930-78848d9293e8?auto=format&fit=crop&w=600&q=80" alt="Foto do Ultrassom">
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item left">
+            <div class="card">
+                <span class="card-date">FAMÍLIA CRESCENDO</span>
+                <h2>Promoção do Alvinho</h2>
+                <p>Nosso mini lion head foi oficialmente promovido a irmão mais velho! Ele já está se preparando (do jeito dele) para proteger e brincar muito com o novo bebê.</p>
+                <div class="media-container">
+                    <img src="https://images.unsplash.com/photo-1585110396000-c9fd45c2c227?auto=format&fit=crop&w=600&q=80" alt="Coelho Alvinho">
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item right">
+            <div class="card">
+                <span class="card-date">O GRANDE DIA</span>
+                <h2>Júlia ou Léo?</h2>
+                <p>O dia de celebrar a vida e descobrir quem vai alegrar os nossos dias. Família, amigos, palpites e muita emoção registrada ao vivo!</p>
+                <div class="media-container">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/uuZE_IRwLNI" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-item left">
+            <div class="card">
+                <span class="card-date">PREPARATIVOS</span>
+                <h2>Primeiras Roupinhas</h2>
+                <p>Montando o seu cantinho e escolhendo cada detalhe com amor. Os sapatinhos já estão nos esperando para dar os primeiros passos juntos.</p>
+                <div class="media-container">
+                    <img src="https://images.unsplash.com/photo-1519014816548-bf5fe059e98b?auto=format&fit=crop&w=600&q=80" alt="Roupinhas de Bebê">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Lógica para animar as cartas (fade-in) conforme a página rola para baixo
+        document.addEventListener("DOMContentLoaded", function() {
+            const observerOpcoes = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.15 // Dispara quando 15% do card estiver visível na tela
+            };
+
+            const observer = new IntersectionObserver((entradas, observer) => {
+                entradas.forEach(entrada => {
+                    if (entrada.isIntersecting) {
+                        // Adiciona a classe 'visivel' que faz a mágica no CSS
+                        entrada.target.classList.add('visivel');
+                        // Para de observar o elemento depois que ele aparece a primeira vez
+                        observer.unobserve(entrada.target);
+                    }
+                });
+            }, observerOpcoes);
+
+            const itens = document.querySelectorAll('.timeline-item');
+            itens.forEach(item => {
+                observer.observe(item);
+            });
+        });
+    </script>
+</body>
+</html>
