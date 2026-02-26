@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chá Revelação: Júlia ou Léo?</title>
     
+    <link rel="icon" href="revelacao.png" type="image/png">
+
+    <meta property="og:title" content="Chá Revelação: Júlia ou Léo?">
+    <meta property="og:description" content="Acompanhe a revelação e deixe seu palpite e carinho guardados.">
+    <meta property="og:image" content="revelacao.png">
+    <meta property="og:type" content="website">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
@@ -38,7 +45,6 @@
             overflow-x: hidden;
         }
 
-        /* Fundo de Nuvens Aquarela Estáticas */
         .decoracao-nuvens {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -52,8 +58,8 @@
             filter: blur(20px);
         }
 
-        /* Interrogações Flutuantes Suaves - 16 Elementos (0.15 Opacidade) */
-        .area-interrogacoes {
+        /* Círculos Flutuantes - Quantidade reduzida para 6 */
+        .area-circulos {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
@@ -61,41 +67,29 @@
             overflow: hidden;
         }
 
-        .interrogacao {
+        .circulo {
             position: absolute;
-            font-family: 'Dancing Script', cursive;
+            border-radius: 50%;
             opacity: 0.15; 
             mix-blend-mode: multiply; 
             animation: flutuar linear infinite;
         }
 
-        .i-rosa { color: var(--rosa-forte); }
-        .i-azul { color: var(--azul-forte); }
+        .c-rosa { background-color: var(--rosa-forte); }
+        .c-azul { background-color: var(--azul-forte); }
 
-        /* Espalhamento, tamanhos e tempos aleatórios para 16 interrogações */
-        .i-1 { left: 5%; font-size: 3rem; animation-duration: 25s; animation-delay: 0s; }
-        .i-2 { left: 15%; font-size: 4.5rem; animation-duration: 30s; animation-delay: 5s; }
-        .i-3 { left: 22%; font-size: 3.5rem; animation-duration: 22s; animation-delay: 2s; }
-        .i-4 { left: 30%; font-size: 5rem; animation-duration: 28s; animation-delay: 10s; }
-        .i-5 { left: 38%; font-size: 3rem; animation-duration: 20s; animation-delay: 7s; }
-        .i-6 { left: 45%; font-size: 4rem; animation-duration: 35s; animation-delay: 1s; }
-        .i-7 { left: 52%; font-size: 3.2rem; animation-duration: 26s; animation-delay: 8s; }
-        .i-8 { left: 60%; font-size: 5.5rem; animation-duration: 32s; animation-delay: 3s; }
-        .i-9 { left: 68%; font-size: 3.8rem; animation-duration: 24s; animation-delay: 12s; }
-        .i-10 { left: 75%; font-size: 4.2rem; animation-duration: 29s; animation-delay: 6s; }
-        .i-11 { left: 82%; font-size: 3.5rem; animation-duration: 21s; animation-delay: 4s; }
-        .i-12 { left: 88%; font-size: 4.8rem; animation-duration: 33s; animation-delay: 9s; }
-        .i-13 { left: 95%; font-size: 3.1rem; animation-duration: 27s; animation-delay: 11s; }
-        .i-14 { left: 10%; font-size: 4.1rem; animation-duration: 31s; animation-delay: 14s; }
-        .i-15 { left: 55%; font-size: 3.6rem; animation-duration: 23s; animation-delay: 15s; }
-        .i-16 { left: 85%; font-size: 5.2rem; animation-duration: 34s; animation-delay: 13s; }
+        .c-1 { left: 15%; width: 40px; height: 40px; animation-duration: 25s; animation-delay: 0s; }
+        .c-2 { left: 85%; width: 60px; height: 60px; animation-duration: 30s; animation-delay: 5s; }
+        .c-3 { left: 30%; width: 30px; height: 30px; animation-duration: 22s; animation-delay: 2s; }
+        .c-4 { left: 70%; width: 50px; height: 50px; animation-duration: 28s; animation-delay: 8s; }
+        .c-5 { left: 50%; width: 80px; height: 80px; animation-duration: 35s; animation-delay: 4s; }
+        .c-6 { left: 10%; width: 45px; height: 45px; animation-duration: 27s; animation-delay: 10s; }
 
         @keyframes flutuar {
             0% { transform: translateY(110vh) rotate(-10deg); }
             100% { transform: translateY(-20vh) rotate(10deg); }
         }
 
-        /* Layout Principal */
         .container {
             max-width: 650px;
             margin: 0 auto;
@@ -108,6 +102,12 @@
             text-align: center;
             margin-bottom: 25px;
             padding-top: 20px;
+        }
+
+        .logo-header {
+            max-width: 160px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 4px 6px rgba(92, 74, 68, 0.08));
         }
 
         header h1 {
@@ -124,7 +124,6 @@
             font-weight: 600;
         }
 
-        /* Vídeo da Live */
         .video-container {
             background: var(--branco-card);
             padding: 10px;
@@ -147,7 +146,6 @@
             border: 0;
         }
 
-        /* Cards Gerais */
         .card {
             background: var(--branco-card);
             border-radius: 20px;
@@ -166,7 +164,6 @@
             color: var(--texto-marrom);
         }
 
-        /* Votação */
         .poll-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -207,7 +204,6 @@
         .progress-julia { background-color: var(--rosa-forte); width: 50%; transition: width 0.8s ease; }
         .progress-leo { background-color: var(--azul-forte); width: 50%; transition: width 0.8s ease; }
 
-        /* Formulário */
         .form-group { margin-bottom: 15px; text-align: left; }
         input, textarea {
             width: 100%; padding: 12px 15px; border: 2px solid #EAE3E1; border-radius: 12px;
@@ -226,27 +222,19 @@
 <body>
 
     <div class="decoracao-nuvens"></div>
-    <div class="area-interrogacoes">
-        <div class="interrogacao i-rosa i-1">?</div>
-        <div class="interrogacao i-azul i-2">?</div>
-        <div class="interrogacao i-rosa i-3">?</div>
-        <div class="interrogacao i-azul i-4">?</div>
-        <div class="interrogacao i-rosa i-5">?</div>
-        <div class="interrogacao i-azul i-6">?</div>
-        <div class="interrogacao i-rosa i-7">?</div>
-        <div class="interrogacao i-azul i-8">?</div>
-        <div class="interrogacao i-rosa i-9">?</div>
-        <div class="interrogacao i-azul i-10">?</div>
-        <div class="interrogacao i-rosa i-11">?</div>
-        <div class="interrogacao i-azul i-12">?</div>
-        <div class="interrogacao i-rosa i-13">?</div>
-        <div class="interrogacao i-azul i-14">?</div>
-        <div class="interrogacao i-rosa i-15">?</div>
-        <div class="interrogacao i-azul i-16">?</div>
+    
+    <div class="area-circulos">
+        <div class="circulo c-rosa c-1"></div>
+        <div class="circulo c-azul c-2"></div>
+        <div class="circulo c-rosa c-3"></div>
+        <div class="circulo c-azul c-4"></div>
+        <div class="circulo c-rosa c-5"></div>
+        <div class="circulo c-azul c-6"></div>
     </div>
 
     <div class="container">
         <header>
+            <img src="revelacao.png" alt="Júlia ou Léo" class="logo-header">
             <h1>Júlia ou Léo?</h1>
             <p>Acompanhe a revelação e deixe seu amor registrado</p>
         </header>
@@ -290,7 +278,6 @@
     </div>
 
     <script>
-        // ATENÇÃO: Cole a URL gerada pelo seu Google Apps Script aqui:
         const APPS_SCRIPT_URL = "SUA_URL_DO_WEB_APP_AQUI";
 
         function dispararConfetes(tipo) {
