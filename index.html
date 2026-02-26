@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chá Revelação: Júlia ou Léo?</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+
+    <style>
+        :root {
+            --rosa-aquarela: #F7D6D9;
+            --rosa-forte: #E5A3AD;
+            --azul-aquarela: #D4E6F1;
+            --azul-forte: #9EBCCC;
+            --fundo-creme: #FCFAF6;
+            --texto-marrom: #5C4A44;
+            --branco-card: rgba(255, 255, 255, 0.95);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background-color: var(--fundo-creme);
+            color: var(--texto-marrom);
+            min-height: 100vh;
+            padding-bottom: 50px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Fundo de Nuvens Aquarela Estáticas */
+        .decoracao-nuvens {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -2;
+            background-image: 
+                radial-gradient(ellipse at 10% 10%, rgba(247, 214, 217, 0.4) 0%, transparent 40%),
+                radial-gradient(ellipse at 90% 15%, rgba(212, 230, 241, 0.4) 0%, transparent 35%),
+                radial-gradient(ellipse at 20% 90%, rgba(212, 230, 241, 0.3) 0%, transparent 45%),
+                radial-gradient(ellipse at 80% 95%, rgba(247, 214, 217, 0.3) 0%, transparent 50%);
+            filter: blur(20px);
+        }
+
+        /* Interrogações Flutuantes Suaves - 16 Elementos (0.15 Opacidade) */
+        .area-interrogacoes {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .interrogacao {
+            position: absolute;
+            font-family: 'Dancing Script', cursive;
+            opacity: 0.15; 
+            mix-blend-mode: multiply; 
+            animation: flutuar linear infinite;
+        }
+
+        .i-rosa { color: var(--rosa-forte); }
+        .i-azul { color: var(--azul-forte); }
+
+        /* Espalhamento, tamanhos e tempos aleatórios para 16 interrogações */
+        .i-1 { left: 5%; font-size: 3rem; animation-duration: 25s; animation-delay: 0s; }
+        .i-2 { left: 15%; font-size: 4.5rem; animation-duration: 30s; animation-delay: 5s; }
+        .i-3 { left: 22%; font-size: 3.5rem; animation-duration: 22s; animation-delay: 2s; }
+        .i-4 { left: 30%; font-size: 5rem; animation-duration: 28s; animation-delay: 10s; }
+        .i-5 { left: 38%; font-size: 3rem; animation-duration: 20s; animation-delay: 7s; }
+        .i-6 { left: 45%; font-size: 4rem; animation-duration: 35s; animation-delay: 1s; }
+        .i-7 { left: 52%; font-size: 3.2rem; animation-duration: 26s; animation-delay: 8s; }
+        .i-8 { left: 60%; font-size: 5.5rem; animation-duration: 32s; animation-delay: 3s; }
+        .i-9 { left: 68%; font-size: 3.8rem; animation-duration: 24s; animation-delay: 12s; }
+        .i-10 { left: 75%; font-size: 4.2rem; animation-duration: 29s; animation-delay: 6s; }
+        .i-11 { left: 82%; font-size: 3.5rem; animation-duration: 21s; animation-delay: 4s; }
+        .i-12 { left: 88%; font-size: 4.8rem; animation-duration: 33s; animation-delay: 9s; }
+        .i-13 { left: 95%; font-size: 3.1rem; animation-duration: 27s; animation-delay: 11s; }
+        .i-14 { left: 10%; font-size: 4.1rem; animation-duration: 31s; animation-delay: 14s; }
+        .i-15 { left: 55%; font-size: 3.6rem; animation-duration: 23s; animation-delay: 15s; }
+        .i-16 { left: 85%; font-size: 5.2rem; animation-duration: 34s; animation-delay: 13s; }
+
+        @keyframes flutuar {
+            0% { transform: translateY(110vh) rotate(-10deg); }
+            100% { transform: translateY(-20vh) rotate(10deg); }
+        }
+
+        /* Layout Principal */
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding-top: 20px;
+        }
+
+        header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 3.5rem;
+            color: var(--texto-marrom);
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(255,255,255,0.8);
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: #8C7A74;
+            font-weight: 600;
+        }
+
+        /* Vídeo da Live */
+        .video-container {
+            background: var(--branco-card);
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(92, 74, 68, 0.08);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 0;
+        }
+
+        /* Cards Gerais */
+        .card {
+            background: var(--branco-card);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(92, 74, 68, 0.06);
+            margin-bottom: 25px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .card-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--texto-marrom);
+        }
+
+        /* Votação */
+        .poll-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-vote {
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #555;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-vote span.votos-count {
+            font-size: 0.9rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .btn-julia { background: linear-gradient(135deg, #FFF0F2, var(--rosa-aquarela)); box-shadow: 0 4px 12px rgba(229, 163, 173, 0.2); }
+        .btn-leo { background: linear-gradient(135deg, #F0F7FB, var(--azul-aquarela)); box-shadow: 0 4px 12px rgba(158, 188, 204, 0.2); }
+        .btn-vote:active { transform: scale(0.96); }
+        .btn-vote.disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .progress-bar-container {
+            width: 100%; height: 12px; background: #EAE3E1; border-radius: 10px; overflow: hidden; display: flex;
+        }
+
+        .progress-julia { background-color: var(--rosa-forte); width: 50%; transition: width 0.8s ease; }
+        .progress-leo { background-color: var(--azul-forte); width: 50%; transition: width 0.8s ease; }
+
+        /* Formulário */
+        .form-group { margin-bottom: 15px; text-align: left; }
+        input, textarea {
+            width: 100%; padding: 12px 15px; border: 2px solid #EAE3E1; border-radius: 12px;
+            background: #FAFAFA; font-size: 1rem; color: var(--texto-marrom); outline: none; transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus { border-color: var(--rosa-forte); }
+        
+        .btn-submit {
+            background: var(--texto-marrom); color: white; border: none; padding: 12px 25px;
+            font-size: 1.1rem; font-weight: 600; border-radius: 25px; cursor: pointer; transition: background 0.2s; width: 100%;
+        }
+        .btn-submit:hover { background: #4A3B36; }
+        .status-msg { margin-top: 10px; font-size: 0.9rem; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div class="decoracao-nuvens"></div>
+    <div class="area-interrogacoes">
+        <div class="interrogacao i-rosa i-1">?</div>
+        <div class="interrogacao i-azul i-2">?</div>
+        <div class="interrogacao i-rosa i-3">?</div>
+        <div class="interrogacao i-azul i-4">?</div>
+        <div class="interrogacao i-rosa i-5">?</div>
+        <div class="interrogacao i-azul i-6">?</div>
+        <div class="interrogacao i-rosa i-7">?</div>
+        <div class="interrogacao i-azul i-8">?</div>
+        <div class="interrogacao i-rosa i-9">?</div>
+        <div class="interrogacao i-azul i-10">?</div>
+        <div class="interrogacao i-rosa i-11">?</div>
+        <div class="interrogacao i-azul i-12">?</div>
+        <div class="interrogacao i-rosa i-13">?</div>
+        <div class="interrogacao i-azul i-14">?</div>
+        <div class="interrogacao i-rosa i-15">?</div>
+        <div class="interrogacao i-azul i-16">?</div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>Júlia ou Léo?</h1>
+            <p>Acompanhe a revelação e deixe seu amor registrado</p>
+        </header>
+
+        <div class="video-container">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/uuZE_IRwLNI" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Seu Palpite</h2>
+            <div class="poll-grid">
+                <button class="btn-vote btn-julia" id="btnJulia" onclick="votar('julia')">
+                    Júlia 🌸
+                    <span class="votos-count" id="countJulia">0 votos</span>
+                </button>
+                <button class="btn-vote btn-leo" id="btnLeo" onclick="votar('leo')">
+                    Léo 🎈
+                    <span class="votos-count" id="countLeo">0 votos</span>
+                </button>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-julia" id="barJulia"></div>
+                <div class="progress-leo" id="barLeo"></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Cápsula do Tempo</h2>
+            <p style="margin-bottom: 20px; font-size: 0.95rem;">Deixe um conselho ou recado. Guardaremos com carinho.</p>
+            <div class="form-group">
+                <input type="text" id="nomeUser" placeholder="Seu Nome (Ex: Titia Ana)" required>
+            </div>
+            <div class="form-group">
+                <textarea id="mensagemUser" rows="3" placeholder="Escreva sua mensagem aqui..." required></textarea>
+            </div>
+            <button class="btn-submit" onclick="enviarMensagem()" id="btnSubmit">Enviar Recado ❤️</button>
+            <div id="statusForm" class="status-msg"></div>
+        </div>
+    </div>
+
+    <script>
+        // ATENÇÃO: Cole a URL gerada pelo seu Google Apps Script aqui:
+        const APPS_SCRIPT_URL = "SUA_URL_DO_WEB_APP_AQUI";
+
+        function dispararConfetes(tipo) {
+            const cores = tipo === 'julia' ? ['#F7D6D9', '#E5A3AD', '#ffffff'] : ['#D4E6F1', '#9EBCCC', '#ffffff'];
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: cores });
+        }
+
+        function atualizarBarra(votosJulia, votosLeo) {
+            document.getElementById('countJulia').innerText = votosJulia + (votosJulia === 1 ? ' voto' : ' votos');
+            document.getElementById('countLeo').innerText = votosLeo + (votosLeo === 1 ? ' voto' : ' votos');
+            
+            const total = votosJulia + votosLeo;
+            if (total === 0) return;
+            
+            const pctJulia = (votosJulia / total) * 100;
+            const pctLeo = 100 - pctJulia;
+            
+            document.getElementById('barJulia').style.width = pctJulia + '%';
+            document.getElementById('barLeo').style.width = pctLeo + '%';
+        }
+
+        async function carregarVotos() {
+            try {
+                if(APPS_SCRIPT_URL === "SUA_URL_DO_WEB_APP_AQUI") return; 
+                const resposta = await fetch(APPS_SCRIPT_URL + "?acao=lerVotos");
+                const dados = await resposta.json();
+                atualizarBarra(dados.julia, dados.leo);
+            } catch (erro) {
+                console.log("Erro ao carregar votos", erro);
+            }
+        }
+
+        async function votar(time) {
+            if (localStorage.getItem('jaVotou')) {
+                alert("Você já registrou seu palpite! Obrigado!");
+                return;
+            }
+
+            dispararConfetes(time);
+            document.getElementById('btnJulia').classList.add('disabled');
+            document.getElementById('btnLeo').classList.add('disabled');
+            localStorage.setItem('jaVotou', 'sim'); 
+
+            try {
+                const resposta = await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ acao: 'votar', time: time })
+                });
+                const dados = await resposta.json();
+                atualizarBarra(dados.julia, dados.leo);
+            } catch (erro) {
+                console.log("Erro ao registrar voto", erro);
+            }
+        }
+
+        async function enviarMensagem() {
+            const nome = document.getElementById('nomeUser').value.trim();
+            const mensagem = document.getElementById('mensagemUser').value.trim();
+            const status = document.getElementById('statusForm');
+            const btn = document.getElementById('btnSubmit');
+
+            if (!nome || !mensagem) {
+                status.innerText = "Por favor, preencha nome e mensagem.";
+                status.style.color = "#E5A3AD";
+                return;
+            }
+
+            btn.innerText = "Enviando...";
+            btn.disabled = true;
+
+            try {
+                await fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify({ acao: 'mensagem', nome: nome, mensagem: mensagem })
+                });
+                
+                status.innerText = "Mensagem guardada com sucesso! ✨";
+                status.style.color = "#9EBCCC";
+                document.getElementById('nomeUser').value = '';
+                document.getElementById('mensagemUser').value = '';
+            } catch (erro) {
+                status.innerText = "Erro ao enviar. Tente novamente.";
+            } finally {
+                btn.innerText = "Enviar Recado ❤️";
+                btn.disabled = false;
+            }
+        }
+
+        carregarVotos();
+        setInterval(carregarVotos, 10000); 
+    </script>
+</body>
+</html>
