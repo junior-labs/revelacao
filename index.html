@@ -7,16 +7,16 @@
     
     <link rel="icon" href="favicon.png" type="image/png">
 
-<meta property="og:title" content="Diário do Nosso Bebê">
-<meta property="og:description" content="Estamos contando os segundos... Venha descobrir com a gente se é Júlia ou Léo ❤️">
-<meta property="og:url" content="https://junior-labs.github.io/revelacao/diario.html">
-<meta property="og:type" content="website">
+    <meta property="og:title" content="Chá Revelação: Júlia ou Léo?">
+    <meta property="og:description" content="Estamos contando os segundos... Venha descobrir com a gente se é Júlia ou Léo ❤️">
+    <meta property="og:url" content="https://junior-labs.github.io/revelacao/diario.html">
+    <meta property="og:type" content="website">
 
-<meta property="og:image" itemprop="image" content="https://junior-labs.github.io/revelacao/revelacao.png">
-<meta property="og:image:secure_url" itemprop="image" content="https://junior-labs.github.io/revelacao/revelacao.png">
-<meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+    <meta property="og:image" itemprop="image" content="https://junior-labs.github.io/revelacao/revelacao.png">
+    <meta property="og:image:secure_url" itemprop="image" content="https://junior-labs.github.io/revelacao/revelacao.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -115,8 +115,8 @@
 
         /* LOGO DOBRO DO TAMANHO */
         .logo-header {
-            max-width: 320px; /* Alterado de 160px para 320px */
-            height: auto; /* Mantém proporção */
+            max-width: 320px; 
+            height: auto; 
             margin-bottom: 10px;
             filter: drop-shadow(0 4px 6px rgba(92, 74, 68, 0.08));
         }
@@ -133,6 +133,45 @@
             font-size: 1.1rem;
             color: #8C7A74;
             font-weight: 600;
+            padding: 0 15px; /* Adiciona um pequeno respiro lateral para o texto mais longo */
+        }
+
+        /* Contador Regressivo */
+        .contador-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 25px;
+        }
+        
+        .contador-box {
+            background: var(--branco-card);
+            padding: 12px 10px;
+            border-radius: 14px;
+            box-shadow: 0 6px 14px rgba(92, 74, 68, 0.08);
+            border: 1px solid rgba(255,255,255,0.9);
+            min-width: 65px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .contador-box .numero {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--texto-marrom);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .contador-box .legenda {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--texto-claro);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* Vídeo da Live */
@@ -251,7 +290,26 @@
         <header>
             <img src="revelacao.png" alt="Júlia ou Léo" class="logo-header">
             <h1>Júlia ou Léo?</h1>
-            <p>Acompanhe a revelação e deixe seu amor registrado</p>
+            <p>Estamos contando os segundos... Venha descobrir com a gente se é Júlia ou Léo ❤️</p>
+            
+            <div class="contador-container" id="contador">
+                <div class="contador-box">
+                    <span class="numero" id="cd-dias">00</span>
+                    <span class="legenda">Dias</span>
+                </div>
+                <div class="contador-box">
+                    <span class="numero" id="cd-horas">00</span>
+                    <span class="legenda">Horas</span>
+                </div>
+                <div class="contador-box">
+                    <span class="numero" id="cd-minutos">00</span>
+                    <span class="legenda">Min</span>
+                </div>
+                <div class="contador-box">
+                    <span class="numero" id="cd-segundos">00</span>
+                    <span class="legenda">Seg</span>
+                </div>
+            </div>
         </header>
 
         <div class="video-container">
@@ -279,7 +337,7 @@
         </div>
 
         <div class="card">
-            <h2 class="card-title">Cápsula do Tempo</h2>
+            <h2 class="card-title">Cantinho das Mensagens</h2>
             <p style="margin-bottom: 20px; font-size: 0.95rem;">Deixe seu carinho.</p>
             <div class="form-group">
                 <input type="text" id="nomeUser" placeholder="Seu Nome (Ex: Titia Ana)" required>
@@ -295,6 +353,31 @@
     <script>
         // ATENÇÃO: Cole a URL gerada pelo seu Google Apps Script aqui:
         const APPS_SCRIPT_URL = "SUA_URL_DO_WEB_APP_AQUI";
+
+        // --- LÓGICA DO CONTADOR REGRESSIVO ---
+        const dataAlvo = new Date('2026-03-21T16:00:00-03:00').getTime();
+
+        const intervaloContador = setInterval(function() {
+            const agora = new Date().getTime();
+            const distancia = dataAlvo - agora;
+
+            if (distancia < 0) {
+                clearInterval(intervaloContador);
+                document.getElementById("contador").innerHTML = "<div class='contador-box' style='width: auto; padding: 15px 25px;'><span class='numero' style='font-size: 1.2rem; color: var(--rosa-forte);'>A live já começou! 🎉</span></div>";
+                return;
+            }
+
+            const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+            document.getElementById("cd-dias").innerText = dias.toString().padStart(2, '0');
+            document.getElementById("cd-horas").innerText = horas.toString().padStart(2, '0');
+            document.getElementById("cd-minutos").innerText = minutos.toString().padStart(2, '0');
+            document.getElementById("cd-segundos").innerText = segundos.toString().padStart(2, '0');
+        }, 1000);
+        // -------------------------------------
 
         function dispararConfetes(tipo) {
             const cores = tipo === 'julia' ? ['#F7D6D9', '#E5A3AD', '#ffffff'] : ['#D4E6F1', '#9EBCCC', '#ffffff'];
