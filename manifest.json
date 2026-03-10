@@ -1,7 +1,7 @@
 {
   "name": "Chá Revelação: Júlia ou Léo",
-  "short_name": "Júlia ou Léo",
-  "start_url": "./index.html",
+  "short_name": "Diário Júlia ou Léo",
+  "start_url": "./diario.html",
   "display": "standalone",
   "background_color": "#FCFAF6",
   "theme_color": "#FCFAF6",
