@@ -257,12 +257,39 @@
         .btn-vote:active { transform: scale(0.96); }
         .btn-vote.disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
+        /* Estilos da Barra de Progresso Atualizados */
         .progress-bar-container {
-            width: 100%; height: 12px; background: #EAE3E1; border-radius: 10px; overflow: hidden; display: flex;
+            width: 100%; 
+            height: 24px; /* Aumentado para caber o texto */
+            background: #EAE3E1; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            display: flex;
         }
 
-        .progress-julia { background-color: var(--rosa-forte); width: 50%; transition: width 0.8s ease; }
-        .progress-leo { background-color: var(--azul-forte); width: 50%; transition: width 0.8s ease; }
+        .progress-julia { 
+            background-color: var(--rosa-forte); 
+            width: 50%; 
+            transition: width 0.8s ease; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .progress-leo { 
+            background-color: var(--azul-forte); 
+            width: 50%; 
+            transition: width 0.8s ease; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
 
         .form-group { margin-bottom: 15px; text-align: left; }
         input, textarea {
@@ -337,8 +364,8 @@
                 </button>
             </div>
             <div class="progress-bar-container">
-                <div class="progress-julia" id="barJulia"></div>
-                <div class="progress-leo" id="barLeo"></div>
+                <div class="progress-julia" id="barJulia">50%</div>
+                <div class="progress-leo" id="barLeo">50%</div>
             </div>
         </div>
 
@@ -357,35 +384,45 @@
     </div>
 
     <script type="module">
-        // Importando os módulos necessários do Firebase diretamente do Google
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
         import { getDatabase, ref, onValue, runTransaction, push } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-        // A URL do seu banco de dados
         const firebaseConfig = {
             databaseURL: "https://revelacao-f0d45-default-rtdb.firebaseio.com"
         };
 
-        // Inicializando o Firebase
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- Lógica de Atualização da Tela (Tempo Real) ---
+        // --- Lógica de Atualização da Tela (Modificada para porcentagem) ---
         window.atualizarBarra = function(votosJulia, votosLeo) {
             document.getElementById('countJulia').innerText = votosJulia + (votosJulia === 1 ? ' voto' : ' votos');
             document.getElementById('countLeo').innerText = votosLeo + (votosLeo === 1 ? ' voto' : ' votos');
             
             const total = votosJulia + votosLeo;
-            if (total === 0) return;
             
-            const pctJulia = (votosJulia / total) * 100;
-            const pctLeo = 100 - pctJulia;
+            // Estado inicial zerado
+            if (total === 0) {
+                document.getElementById('barJulia').style.width = '50%';
+                document.getElementById('barLeo').style.width = '50%';
+                document.getElementById('barJulia').innerText = '0%';
+                document.getElementById('barLeo').innerText = '0%';
+                return;
+            }
             
+            // Cálculo arredondado para exibição limpa
+            const pctJulia = Math.round((votosJulia / total) * 100);
+            const pctLeo = 100 - pctJulia; // A subtração garante que sempre some 100%
+            
+            // Move a barra
             document.getElementById('barJulia').style.width = pctJulia + '%';
             document.getElementById('barLeo').style.width = pctLeo + '%';
+
+            // Escreve o texto da porcentagem (Oculta se for menor que 5% para não quebrar o layout)
+            document.getElementById('barJulia').innerText = pctJulia > 5 ? pctJulia + '%' : '';
+            document.getElementById('barLeo').innerText = pctLeo > 5 ? pctLeo + '%' : '';
         };
 
-        // Escutando as mudanças no banco de dados (A mágica do Realtime acontece aqui)
         const votosRef = ref(db, 'votos');
         onValue(votosRef, (snapshot) => {
             const dados = snapshot.val() || { julia: 0, leo: 0 };
@@ -394,30 +431,25 @@
             window.atualizarBarra(votosJulia, votosLeo);
         });
 
-        // --- Lógica de Computar o Voto ---
         window.votar = function(time) {
             if (localStorage.getItem('jaVotou')) {
                 alert("Você já registrou seu palpite! Obrigado!");
                 return;
             }
 
-            // Confetes visuais imediatos
             const cores = time === 'julia' ? ['#F7D6D9', '#E5A3AD', '#ffffff'] : ['#D4E6F1', '#9EBCCC', '#ffffff'];
             confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: cores });
 
-            // Desabilita os botões para não clicar duas vezes
             document.getElementById('btnJulia').classList.add('disabled');
             document.getElementById('btnLeo').classList.add('disabled');
             localStorage.setItem('jaVotou', 'sim'); 
 
-            // Grava o voto no Firebase usando Transação (à prova de falhas simultâneas)
             const timeRef = ref(db, 'votos/' + time);
             runTransaction(timeRef, (votosAtuais) => {
                 return (votosAtuais || 0) + 1;
             });
         };
 
-        // --- Lógica do Cantinho das Mensagens ---
         window.enviarMensagem = async function() {
             const nome = document.getElementById('nomeUser').value.trim();
             const mensagem = document.getElementById('mensagemUser').value.trim();
@@ -434,7 +466,6 @@
             btn.disabled = true;
 
             try {
-                // Empurra uma nova mensagem para a lista no banco de dados
                 const mensagensRef = ref(db, 'mensagens');
                 await push(mensagensRef, {
                     nome: nome,
