@@ -143,3 +143,367 @@
         header p {
             font-size: 1.1rem;
             color: #8C7A74;
+            font-weight: 600;
+            padding: 0 15px;
+        }
+
+        .contador-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 25px;
+        }
+        
+        .contador-box {
+            background: var(--branco-card);
+            padding: 12px 10px;
+            border-radius: 14px;
+            box-shadow: 0 6px 14px rgba(92, 74, 68, 0.08);
+            border: 1px solid rgba(255,255,255,0.9);
+            min-width: 65px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .contador-box .numero {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--texto-marrom);
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+
+        .contador-box .legenda {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--texto-claro);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .video-container {
+            background: var(--branco-card);
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(92, 74, 68, 0.08);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255,255,255,0.8);
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border: 0;
+        }
+
+        .card {
+            background: var(--branco-card);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 24px rgba(92, 74, 68, 0.06);
+            margin-bottom: 25px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .card-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+            color: var(--texto-marrom);
+        }
+
+        .poll-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-vote {
+            border: none;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #555;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-vote span.votos-count {
+            font-size: 0.9rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .btn-julia { background: linear-gradient(135deg, #FFF0F2, var(--rosa-aquarela)); box-shadow: 0 4px 12px rgba(229, 163, 173, 0.2); }
+        .btn-leo { background: linear-gradient(135deg, #F0F7FB, var(--azul-aquarela)); box-shadow: 0 4px 12px rgba(158, 188, 204, 0.2); }
+        .btn-vote:active { transform: scale(0.96); }
+        .btn-vote.disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+        .progress-bar-container {
+            width: 100%; 
+            height: 24px; 
+            background: #EAE3E1; 
+            border-radius: 12px; 
+            overflow: hidden; 
+            display: flex;
+        }
+
+        .progress-julia { 
+            background-color: var(--rosa-forte); 
+            width: 50%; 
+            transition: width 0.8s ease; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .progress-leo { 
+            background-color: var(--azul-forte); 
+            width: 50%; 
+            transition: width 0.8s ease; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+
+        .form-group { margin-bottom: 15px; text-align: left; }
+        input, textarea {
+            width: 100%; padding: 12px 15px; border: 2px solid #EAE3E1; border-radius: 12px;
+            background: #FAFAFA; font-size: 1rem; color: var(--texto-marrom); outline: none; transition: border-color 0.2s;
+        }
+        input:focus, textarea:focus { border-color: var(--rosa-forte); }
+        
+        .btn-submit {
+            background: var(--texto-marrom); color: white; border: none; padding: 12px 25px;
+            font-size: 1.1rem; font-weight: 600; border-radius: 25px; cursor: pointer; transition: background 0.2s; width: 100%;
+        }
+        .btn-submit:hover { background: #4A3B36; }
+        .status-msg { margin-top: 10px; font-size: 0.9rem; font-weight: 600; }
+    </style>
+</head>
+<body>
+
+    <div class="decoracao-nuvens"></div>
+    
+    <div class="area-circulos">
+        <div class="circulo c-rosa c-1"></div>
+        <div class="circulo c-azul c-2"></div>
+        <div class="circulo c-rosa c-3"></div>
+        <div class="circulo c-azul c-4"></div>
+        <div class="circulo c-rosa c-5"></div>
+        <div class="circulo c-azul c-6"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <img src="revelacao.png" alt="Júlia ou Léo" class="logo-header">
+            <h1>Júlia ou Léo?</h1>
+            <p>Estamos contando os segundos... Venha descobrir com a gente se é Júlia ou Léo ❤️</p>
+            
+            <div class="contador-container" id="contador">
+                <div class="contador-box">
+                    <span class="numero" id="cd-dias">00</span>
+                    <span class="legenda">Dias</span>
+                </div>
+                <div class="contador-box">
+                    <span class="numero" id="cd-horas">00</span>
+                    <span class="legenda">Horas</span>
+                </div>
+                <div class="contador-box">
+                    <span class="numero" id="cd-minutos">00</span>
+                    <span class="legenda">Min</span>
+                </div>
+                <div class="contador-box">
+                    <span class="numero" id="cd-segundos">00</span>
+                    <span class="legenda">Seg</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="video-container">
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/EP22pVC-HSI" allowfullscreen></iframe>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Seu Palpite</h2>
+            <div class="poll-grid">
+                <button class="btn-vote btn-julia" id="btnJulia" onclick="votar('julia')">
+                    Júlia 🌸
+                    <span class="votos-count" id="countJulia">0 votos</span>
+                </button>
+                <button class="btn-vote btn-leo" id="btnLeo" onclick="votar('leo')">
+                    Léo 🎈
+                    <span class="votos-count" id="countLeo">0 votos</span>
+                </button>
+            </div>
+            <div class="progress-bar-container">
+                <div class="progress-julia" id="barJulia">50%</div>
+                <div class="progress-leo" id="barLeo">50%</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Cantinho das Mensagens</h2>
+            <p style="margin-bottom: 20px; font-size: 0.95rem;">Deixe seu carinho.</p>
+            <div class="form-group">
+                <input type="text" id="nomeUser" placeholder="Seu Nome (Ex: Titia Ana)" required>
+            </div>
+            <div class="form-group">
+                <textarea id="mensagemUser" rows="3" placeholder="Escreva sua mensagem aqui..." required></textarea>
+            </div>
+            <button class="btn-submit" onclick="enviarMensagem()" id="btnSubmit">Enviar Recado ❤️</button>
+            <div id="statusForm" class="status-msg"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, onValue, runTransaction, push } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        const firebaseConfig = {
+            databaseURL: "https://revelacao-f0d45-default-rtdb.firebaseio.com"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        window.atualizarBarra = function(votosJulia, votosLeo) {
+            document.getElementById('countJulia').innerText = votosJulia + (votosJulia === 1 ? ' voto' : ' votos');
+            document.getElementById('countLeo').innerText = votosLeo + (votosLeo === 1 ? ' voto' : ' votos');
+            
+            const total = votosJulia + votosLeo;
+            
+            if (total === 0) {
+                document.getElementById('barJulia').style.width = '50%';
+                document.getElementById('barLeo').style.width = '50%';
+                document.getElementById('barJulia').innerText = '0%';
+                document.getElementById('barLeo').innerText = '0%';
+                return;
+            }
+            
+            const pctJulia = Math.round((votosJulia / total) * 100);
+            const pctLeo = 100 - pctJulia; 
+            
+            document.getElementById('barJulia').style.width = pctJulia + '%';
+            document.getElementById('barLeo').style.width = pctLeo + '%';
+
+            document.getElementById('barJulia').innerText = pctJulia > 5 ? pctJulia + '%' : '';
+            document.getElementById('barLeo').innerText = pctLeo > 5 ? pctLeo + '%' : '';
+        };
+
+        const votosRef = ref(db, 'votos');
+        onValue(votosRef, (snapshot) => {
+            const dados = snapshot.val() || { julia: 0, leo: 0 };
+            const votosJulia = dados.julia || 0;
+            const votosLeo = dados.leo || 0;
+            window.atualizarBarra(votosJulia, votosLeo);
+        });
+
+        window.votar = function(time) {
+            if (localStorage.getItem('jaVotou')) {
+                alert("Você já registrou seu palpite! Obrigado!");
+                return;
+            }
+
+            const cores = time === 'julia' ? ['#F7D6D9', '#E5A3AD', '#ffffff'] : ['#D4E6F1', '#9EBCCC', '#ffffff'];
+            confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: cores });
+
+            document.getElementById('btnJulia').classList.add('disabled');
+            document.getElementById('btnLeo').classList.add('disabled');
+            localStorage.setItem('jaVotou', 'sim'); 
+
+            const timeRef = ref(db, 'votos/' + time);
+            runTransaction(timeRef, (votosAtuais) => {
+                return (votosAtuais || 0) + 1;
+            });
+        };
+
+        window.enviarMensagem = async function() {
+            const nome = document.getElementById('nomeUser').value.trim();
+            const mensagem = document.getElementById('mensagemUser').value.trim();
+            const status = document.getElementById('statusForm');
+            const btn = document.getElementById('btnSubmit');
+
+            if (!nome || !mensagem) {
+                status.innerText = "Por favor, preencha nome e mensagem.";
+                status.style.color = "#E5A3AD";
+                return;
+            }
+
+            btn.innerText = "Enviando...";
+            btn.disabled = true;
+
+            try {
+                const mensagensRef = ref(db, 'mensagens');
+                await push(mensagensRef, {
+                    nome: nome,
+                    mensagem: mensagem,
+                    dataHora: new Date().toLocaleString('pt-BR')
+                });
+                
+                status.innerText = "Mensagem guardada com sucesso! ✨";
+                status.style.color = "#9EBCCC";
+                document.getElementById('nomeUser').value = '';
+                document.getElementById('mensagemUser').value = '';
+            } catch (erro) {
+                console.error("Erro no Firebase: ", erro);
+                status.innerText = "Erro ao enviar. Tente novamente.";
+            } finally {
+                btn.innerText = "Enviar Recado ❤️";
+                btn.disabled = false;
+            }
+        };
+    </script>
+
+    <script>
+        const dataAlvo = new Date('2026-03-21T16:00:00-03:00').getTime();
+
+        const intervaloContador = setInterval(function() {
+            const agora = new Date().getTime();
+            const distancia = dataAlvo - agora;
+
+            if (distancia < 0) {
+                clearInterval(intervaloContador);
+                document.getElementById("contador").innerHTML = "<div class='contador-box' style='width: auto; padding: 15px 25px;'><span class='numero' style='font-size: 1.2rem; color: var(--rosa-forte);'>A live já começou! 🎉</span></div>";
+                return;
+            }
+
+            const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+            const segundos = Math.floor((distancia % (1000 * 60)) / 1000);
+
+            document.getElementById("cd-dias").innerText = dias.toString().padStart(2, '0');
+            document.getElementById("cd-horas").innerText = horas.toString().padStart(2, '0');
+            document.getElementById("cd-minutos").innerText = minutos.toString().padStart(2, '0');
+            document.getElementById("cd-segundos").innerText = segundos.toString().padStart(2, '0');
+        }, 1000);
+    </script>
+</body>
+</html>
