@@ -47,7 +47,7 @@
             --azul-aquarela: #D4E6F1;
             --azul-forte: #9EBCCC;
             --azul-claro: #E1F0F8;
-            --fundo-creme: #F0F6FA; /* Fundo temático do Léo */
+            --fundo-creme: #F0F6FA; 
             --texto-marrom: #5C4A44;
             --texto-claro: #8C7A74;
             --branco-card: rgba(255, 255, 255, 0.95);
@@ -150,7 +150,6 @@
             margin-bottom: 25px;
         }
 
-        /* --- O Botão Principal para o Diário --- */
         .btn-diario {
             display: inline-block;
             background: linear-gradient(135deg, var(--azul-forte), #7AA7C0);
@@ -221,6 +220,19 @@
         .progress-julia { background-color: var(--rosa-forte); width: 50%; }
         .progress-leo { background-color: var(--azul-forte); width: 50%; }
 
+        /* Mensagem de Zoeira */
+        .texto-zoeira {
+            margin-top: 18px;
+            font-weight: 700;
+            color: var(--texto-marrom);
+            font-size: 1.05rem;
+            display: none; /* Inicia oculto até o JS carregar os dados */
+            background: #FAFAFA;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px dashed #D4E6F1;
+        }
+
         /* Formulário */
         .form-group { margin-bottom: 15px; text-align: left; }
         input, textarea {
@@ -241,13 +253,12 @@
             display: flex;
             flex-direction: column;
             gap: 15px;
-            max-height: 400px; /* Limita a altura para rolar */
+            max-height: 400px; 
             overflow-y: auto;
             padding-right: 5px;
             text-align: left;
         }
         
-        /* Estilo da barra de rolagem */
         .lista-mensagens::-webkit-scrollbar { width: 6px; }
         .lista-mensagens::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
         .lista-mensagens::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 10px; }
@@ -310,6 +321,7 @@
                 <div class="progress-julia" id="barJulia"></div>
                 <div class="progress-leo" id="barLeo"></div>
             </div>
+            <p id="txtZoeira" class="texto-zoeira"></p>
         </div>
 
         <div class="card">
@@ -344,9 +356,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        // --- 1. Lógica do Placar Final (Somente Leitura) ---
+        // --- 1. Lógica do Placar Final e Brincadeira ---
         window.atualizarPlacar = function(votosJulia, votosLeo) {
             const total = votosJulia + votosLeo;
+            const txtZoeira = document.getElementById('txtZoeira');
             
             if (total === 0) {
                 document.getElementById('lblJulia').innerText = `Júlia: 0 votos`;
@@ -355,6 +368,7 @@
                 document.getElementById('barLeo').style.width = '50%';
                 document.getElementById('barJulia').innerText = '';
                 document.getElementById('barLeo').innerText = '';
+                txtZoeira.style.display = 'none';
                 return;
             }
             
@@ -369,9 +383,18 @@
 
             document.getElementById('barJulia').innerText = pctJulia > 5 ? pctJulia + '%' : '';
             document.getElementById('barLeo').innerText = pctLeo > 5 ? pctLeo + '%' : '';
+
+            // A lógica da brincadeira baseada nos votos
+            txtZoeira.style.display = 'block';
+            if (votosJulia > votosLeo) {
+                txtZoeira.innerHTML = "Parece que a intuição da família estava descalibrada, hein? A maioria errou feio! O Léo enganou todo mundo 😂💙";
+            } else if (votosLeo > votosJulia) {
+                txtZoeira.innerHTML = "A maioria acertou! A intuição da família não falha 💙";
+            } else {
+                txtZoeira.innerHTML = "Empate cravado! O Léo dividiu a torcida no meio 💙";
+            }
         };
 
-        // Escutar votos para manter o placar atualizado
         const votosRef = ref(db, 'votos');
         onValue(votosRef, (snapshot) => {
             const dados = snapshot.val() || { julia: 0, leo: 0 };
@@ -383,7 +406,7 @@
         const mensagensRef = ref(db, 'mensagens');
         
         onValue(mensagensRef, (snapshot) => {
-            muralContainer.innerHTML = ''; // Limpa o carregando
+            muralContainer.innerHTML = ''; 
             const dados = snapshot.val();
             
             if (!dados) {
@@ -391,11 +414,9 @@
                 return;
             }
 
-            // Transforma o objeto em Array e inverte para o mais novo ficar no topo
             const mensagensArray = Object.values(dados).reverse();
 
             mensagensArray.forEach(msg => {
-                // Extrai só a data se a string tiver hora (depende de como o navegador salvou antes)
                 const dataCurta = msg.dataHora ? msg.dataHora.split(' ')[0] : '';
                 
                 muralContainer.innerHTML += `
@@ -433,7 +454,6 @@
                     dataHora: new Date().toLocaleString('pt-BR')
                 });
                 
-                // Dispara confetes azuis na hora de enviar com sucesso
                 confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ['#D4E6F1', '#9EBCCC', '#ffffff'] });
 
                 status.innerText = "Mensagem guardada com sucesso! ✨";
